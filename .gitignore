@@ -31,7 +31,7 @@ bld/
 [Ll]og/
 [Ll]ogs/
 #include actual build
-![Bb]in/[Rr]elease/*.exe
+#![Bb]in/[Rr]elease/*.exe
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
