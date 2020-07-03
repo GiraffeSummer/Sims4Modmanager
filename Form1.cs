@@ -26,7 +26,6 @@ namespace Sims_Mod_manager
         public List<string> VisualCategories;
         public Form1()
         {
-            //.package
             InitializeComponent();
 
             panel1.BorderStyle = BorderStyle.FixedSingle;
@@ -92,7 +91,6 @@ namespace Sims_Mod_manager
             listBox1.Items.Clear();
             Category category = new Category(filterBox.Items[filterBox.SelectedIndex].ToString());
             string modEnabled = modEnabledFilter.Items[modEnabledFilter.SelectedIndex].ToString();
-            Console.WriteLine(modEnabled);
             if (category.name == noCategory.name) category = null;
             List<Mod> filteredMods = data.mods.FindAll(m =>
             {
@@ -125,19 +123,26 @@ namespace Sims_Mod_manager
             {
                 progressBar1.Visible = true;
                 progressBar1.Value = 0;
-                progressBar1.Maximum = m.mod.files.Count;                
-                
+                progressBar1.Maximum = m.mod.files.Count;
+                Console.WriteLine("FORM: " + m.mod.files.Count);
                 for (int i = 0; i < m.mod.files.Count; i++)
                 {
                     string fileName = Path.GetFileName(m.mod.files[i]);
 
                     string packPath = m.mod.files[i];
-                    Console.WriteLine(packPath);
-                    while (f.IsFileLocked(new FileInfo(packPath)))
+                    Console.WriteLine("Pack: " + packPath);
+                    Console.WriteLine(AllFilesPath + fileName);
+                    Console.WriteLine(f.IsFileLocked(new FileInfo(packPath)));
+                    do
                     {
-                        File.Copy(packPath, AllFilesPath + fileName, true);
-                        File.Copy(packPath, path + fileName, true);
-                    }
+                        try
+                        {
+                            File.Copy(packPath, AllFilesPath + fileName, true);
+                            //File.Copy(packPath, path + fileName, true);
+                        }
+                        catch (Exception er) { }
+                    } while (f.IsFileLocked(new FileInfo(packPath)));
+
                     m.mod.files[i] = AllFilesPath + fileName;
                     progressBar1.Value = i;
                 }
@@ -145,15 +150,15 @@ namespace Sims_Mod_manager
                 data.Save(dataPath);
                 listBox1.Items.Add(m.mod.name);
 
-                timer.Interval = 1000;
+                timer.Interval = 500;
                 timer.Start();
 
-                // Hook up the Elapsed event for the timer.
                 timer.Tick += delegate (object se, EventArgs ea)
                 {
                     progressBar1.Visible = false;
                     timer.Enabled = false;
                     timer.Dispose();
+                    ToggleInstallMod(m.mod, true);
                 };
 
                 //checkedListBox1.SetItemChecked(indexMax, true);
@@ -196,7 +201,6 @@ namespace Sims_Mod_manager
             }
         }
 
-
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Mod mod = data.mods.Find(m => m.name == listBox1.Items[listBox1.SelectedIndex].ToString());
@@ -228,13 +232,23 @@ namespace Sims_Mod_manager
         {
             Mod mod = data.mods.Find(m => m.name == listBox1.Items[listBox1.SelectedIndex].ToString());
 
-            mod.enabled = !mod.enabled;
+            ToggleInstallMod(mod, !mod.enabled);
+
+            GetModInfo();
+        }
+
+        public void ToggleInstallMod(Mod mod, bool install)
+        {
+            Timer timer = new Timer();
+            progressBar1.Visible = true;
+            progressBar1.Value = 0;
+            progressBar1.Maximum = mod.files.Count;
+            mod.enabled = install;
 
             for (int i = 0; i < mod.files.Count; i++)
             {
-
                 string fileName = Path.GetFileName(mod.files[i]);
-                if (mod.enabled)
+                if (install)
                 {
                     File.Copy(AllFilesPath + fileName, path + fileName, true);
                 }
@@ -242,9 +256,19 @@ namespace Sims_Mod_manager
                 {
                     File.Delete(path + fileName);
                 }
+                progressBar1.Value = i;
             }
             data.Save(dataPath);
-            GetModInfo();
+
+            timer.Interval = 1000;
+            timer.Start();
+
+            timer.Tick += delegate (object se, EventArgs ea)
+            {
+                progressBar1.Visible = false;
+                timer.Enabled = false;
+                timer.Dispose();
+            };
         }
 
         private void FilterChanged(object sender, EventArgs e)
@@ -276,6 +300,29 @@ namespace Sims_Mod_manager
                 data.Save(dataPath);
             }
             GetModInfo();
+        }
+
+        private void addCategoryBtn_Click(object sender, EventArgs e)
+        {
+            inputBox input = new inputBox("Enter new Category name:");
+            input.ShowDialog();
+            if (input.DialogResult == DialogResult.OK)
+            {
+                Category category = new Category(input.text);
+                if (data.categories.Exists(c => c.name.ToLower() == input.text.ToLower()))
+                {
+                    MessageBox.Show("This category already exists");
+                    return;
+                }
+                data.categories.Add(category);
+                data.Save(dataPath);
+
+                VisualCategories.Clear();
+                for (int i = 0; i < data.categories.Count; i++)
+                {
+                    VisualCategories.Add(data.categories[i].name);
+                }
+            }
         }
     }
 }

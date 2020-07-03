@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.modMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.uninstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +53,7 @@
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.foldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.addCategoryBtn = new System.Windows.Forms.Button();
             this.modMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -63,28 +65,28 @@
             this.deleteToolStripMenuItem,
             this.editToolStripMenuItem});
             this.modMenu.Name = "modMenu";
-            this.modMenu.Size = new System.Drawing.Size(181, 92);
+            this.modMenu.Size = new System.Drawing.Size(115, 70);
             this.modMenu.Opening += new System.ComponentModel.CancelEventHandler(this.modMenu_Opening);
             // 
             // uninstallToolStripMenuItem
             // 
             this.uninstallToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.uninstallToolStripMenuItem.Name = "uninstallToolStripMenuItem";
-            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.uninstallToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.uninstallToolStripMenuItem.Text = "Disable";
             this.uninstallToolStripMenuItem.Click += new System.EventHandler(this.uninstallToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.editToolStripMenuItem.Text = "Edit";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
@@ -263,11 +265,22 @@
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 14;
             // 
+            // addCategoryBtn
+            // 
+            this.addCategoryBtn.Location = new System.Drawing.Point(102, 26);
+            this.addCategoryBtn.Name = "addCategoryBtn";
+            this.addCategoryBtn.Size = new System.Drawing.Size(84, 30);
+            this.addCategoryBtn.TabIndex = 15;
+            this.addCategoryBtn.Text = "Add Category";
+            this.addCategoryBtn.UseVisualStyleBackColor = true;
+            this.addCategoryBtn.Click += new System.EventHandler(this.addCategoryBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 637);
+            this.Controls.Add(this.addCategoryBtn);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button1);
@@ -277,6 +290,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.modFileBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Form1";
             this.modMenu.ResumeLayout(false);
@@ -311,6 +325,7 @@
         private System.Windows.Forms.ToolStripMenuItem foldersToolStripMenuItem;
         private System.Windows.Forms.ComboBox modEnabledFilter;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button addCategoryBtn;
     }
 }
 

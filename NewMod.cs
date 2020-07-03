@@ -53,8 +53,14 @@ namespace Sims_Mod_manager
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (Busy)
+            {
+                MessageBox.Show("Busy loading mods.");
+                return;
+            }
             mod.name = textBox1.Text;
             mod.category = new Category(comboBox1.Items[comboBox1.SelectedIndex].ToString());
+            Console.WriteLine("MOd ADDER:" + mod.files.Count);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -66,6 +72,7 @@ namespace Sims_Mod_manager
             {
                 using (OpenFileDialog openFileDialog = new OpenFileDialog())
                 {
+                    openFileDialog.Multiselect = true;
                     openFileDialog.InitialDirectory = Form1.data.openDirectory;
                     openFileDialog.Filter = "Mod files (*.zip,*.package;*.t4script)|*.zip;*.package|Whatever (testing) (*.*)|*.*";
                     openFileDialog.FilterIndex = 1;
@@ -74,54 +81,57 @@ namespace Sims_Mod_manager
                     if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
                         //Get the path of specified file
-                        string filePath = openFileDialog.FileName;
-                        string fileName = Path.GetFileName(filePath);
-                        string extention = Path.GetExtension(filePath);
-                        string folderpath = Path.GetDirectoryName(filePath);
-                        Form1.data.openDirectory = folderpath;
-
-                        this.textBox1.Text = fileName.Replace(extention, "");
-                        this.Text = fileName + " (" + extention + ")";
                         comboBox1.SelectedIndex = comboBox1.Items.Count - 1;
-                        if (extention == ".zip" || extention == ".7z" || extention == ".rar")
+                        mod = new Mod(Path.GetFileName(openFileDialog.FileNames[0]));
+                        mod.category = new Category(comboBox1.Items[comboBox1.SelectedIndex].ToString());
+                        this.textBox1.Text = Path.GetFileName(openFileDialog.FileNames[0]).Replace(Path.GetExtension(openFileDialog.FileNames[0]), "");
+                        this.Text = Path.GetFileName(openFileDialog.FileNames[0]) + " (" + Path.GetExtension(openFileDialog.FileNames[0]) + ")";
+                        Busy = true;
+                        button2.Enabled = false;
+                        foreach (string filePath in openFileDialog.FileNames)
                         {
-                            progressBar1.Visible = true;
-                            Busy = true;
-                            button2.Enabled = !Busy;
-                            //read files in zip an process them
-                            using (ZipArchive archive = ZipFile.Open(filePath, ZipArchiveMode.Read))
+                            // string filePath = openFileDialog.FileName;
+                            string fileName = Path.GetFileName(filePath);
+                            string extention = Path.GetExtension(filePath);
+                            string folderpath = Path.GetDirectoryName(filePath);
+                            Form1.data.openDirectory = folderpath;
+                            
+                            if (extention == ".zip" || extention == ".7z" || extention == ".rar")
                             {
-                                progressBar1.Maximum = archive.Entries.Count;
-                                mod = new Mod(fileName);
-                                mod.category = new Category(comboBox1.Items[comboBox1.SelectedIndex].ToString());
-                                foreach (ZipArchiveEntry item in archive.Entries)
-                                {
-                                    if (!String.IsNullOrEmpty(item.Name))//check if not folder
-                                    {
-                                        string itemName = item.FullName;
-                                        if (itemName.Contains('/')) itemName = itemName.Split('/')[1];
+                                progressBar1.Visible = true;
 
-                                        string ext = Path.GetExtension(itemName);
-                                        if (ForbinnenExtentions.Contains(ext)) continue;
-                                        Console.WriteLine(extractPath + itemName);
-                                        item.ExtractToFile(extractPath + itemName, true);
-                                        listBox1.Items.Add(item);
-                                        mod.files.Add(extractPath + itemName);
-                                        progressBar1.Value = archive.Entries.IndexOf(item);
+                                //read files in zip an process them
+                                using (ZipArchive archive = ZipFile.Open(filePath, ZipArchiveMode.Read))
+                                {
+                                    progressBar1.Maximum = archive.Entries.Count;
+                                    foreach (ZipArchiveEntry item in archive.Entries)
+                                    {
+                                        if (!String.IsNullOrEmpty(item.Name))//check if not folder
+                                        {
+                                            string itemName = item.FullName;
+                                            if (itemName.Contains('/')) itemName = itemName.Split('/')[1];
+
+                                            string ext = Path.GetExtension(itemName);
+                                            if (ForbinnenExtentions.Contains(ext)) continue;
+                                            //Console.WriteLine(extractPath + itemName);
+                                            item.ExtractToFile(extractPath + itemName, true);
+                                            listBox1.Items.Add(item);
+                                            mod.files.Add(extractPath + itemName);
+                                            progressBar1.Value = archive.Entries.IndexOf(item);
+                                        }
                                     }
-                                }
+                                }                                
+                                
+                                progressBar1.Visible = false;
                             }
-                            Busy = false;
-                            button2.Enabled = !Busy;
-                            progressBar1.Visible = false;
+                            else
+                            {
+                                mod.files.Add(filePath);
+                                listBox1.Items.Add(Path.GetFileName(filePath));
+                            }
                         }
-                        else
-                        {
-                            mod = new Mod(fileName);
-                            mod.category = new Category(comboBox1.Items[comboBox1.SelectedIndex].ToString());
-                            mod.files.Add(filePath);
-                            listBox1.Items.Add(Path.GetFileName(filePath));
-                        }
+                        button2.Enabled = true;
+                        Busy = false;
                     }
                 }
             }

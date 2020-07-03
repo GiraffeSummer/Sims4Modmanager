@@ -91,7 +91,7 @@ namespace Sims_Mod_manager
     }
     public partial class Functions
     {
-         public virtual bool IsFileLocked(FileInfo file)
+        public virtual bool IsFileLocked(FileInfo file)
         {
             try
             {
