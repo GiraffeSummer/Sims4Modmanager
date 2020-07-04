@@ -53,7 +53,7 @@
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.foldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.addCategoryBtn = new System.Windows.Forms.Button();
+            this.CategoryBtn = new System.Windows.Forms.Button();
             this.modMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -265,22 +265,22 @@
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 14;
             // 
-            // addCategoryBtn
+            // CategoryBtn
             // 
-            this.addCategoryBtn.Location = new System.Drawing.Point(102, 26);
-            this.addCategoryBtn.Name = "addCategoryBtn";
-            this.addCategoryBtn.Size = new System.Drawing.Size(84, 30);
-            this.addCategoryBtn.TabIndex = 15;
-            this.addCategoryBtn.Text = "Add Category";
-            this.addCategoryBtn.UseVisualStyleBackColor = true;
-            this.addCategoryBtn.Click += new System.EventHandler(this.addCategoryBtn_Click);
+            this.CategoryBtn.Location = new System.Drawing.Point(102, 26);
+            this.CategoryBtn.Name = "CategoryBtn";
+            this.CategoryBtn.Size = new System.Drawing.Size(84, 30);
+            this.CategoryBtn.TabIndex = 15;
+            this.CategoryBtn.Text = "Categories";
+            this.CategoryBtn.UseVisualStyleBackColor = true;
+            this.CategoryBtn.Click += new System.EventHandler(this.addCategoryBtn_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 637);
-            this.Controls.Add(this.addCategoryBtn);
+            this.Controls.Add(this.CategoryBtn);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button1);
@@ -325,7 +325,7 @@
         private System.Windows.Forms.ToolStripMenuItem foldersToolStripMenuItem;
         private System.Windows.Forms.ComboBox modEnabledFilter;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Button addCategoryBtn;
+        private System.Windows.Forms.Button CategoryBtn;
     }
 }
 

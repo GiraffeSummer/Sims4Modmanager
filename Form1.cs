@@ -23,6 +23,12 @@ namespace Sims_Mod_manager
 
         Category noCategory = new Category("None");
 
+        public static Category[] BaseCategories = new Category[] {
+                        new Category("Build Mode"),
+                        new Category("Buy Mode"),
+                        new Category("CAS(create a sim)"),
+                        new Category("Ect.") };
+
         public List<string> VisualCategories;
         public Form1()
         {
@@ -63,11 +69,7 @@ namespace Sims_Mod_manager
                 {
                     data = new Data(input.text);
                     data.openDirectory = path;
-                    data.categories.AddRange(new Category[] {
-                        new Category("Build Mode"),
-                        new Category("Buy Mode"),
-                        new Category("CAS(create a sim)"),
-                        new Category("Ect.") });
+                    data.categories.AddRange(BaseCategories);
                     data.Save(dataPath);
                     this.Text = data.user;
                     for (int i = 0; i < data.categories.Count; i++)
@@ -304,24 +306,18 @@ namespace Sims_Mod_manager
 
         private void addCategoryBtn_Click(object sender, EventArgs e)
         {
-            inputBox input = new inputBox("Enter new Category name:");
-            input.ShowDialog();
-            if (input.DialogResult == DialogResult.OK)
-            {
-                Category category = new Category(input.text);
-                if (data.categories.Exists(c => c.name.ToLower() == input.text.ToLower()))
-                {
-                    MessageBox.Show("This category already exists");
-                    return;
-                }
-                data.categories.Add(category);
-                data.Save(dataPath);
+            EditCategories categories = new EditCategories();
+            categories.dataPath = dataPath;
+            categories.ShowDialog();
 
+            if (categories.DialogResult == DialogResult.OK)
+            {
                 VisualCategories.Clear();
                 for (int i = 0; i < data.categories.Count; i++)
                 {
                     VisualCategories.Add(data.categories[i].name);
                 }
+                GetModInfo();
             }
         }
     }
