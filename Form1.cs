@@ -16,7 +16,6 @@ namespace Sims_Mod_manager
     public partial class Form1 : Form
     {
         public static Data data;
-        public static string illegalCharacters = "\"M\"\\a/ry/ h**ad:>> a\\/:*?\"| li*tt|le|| la\"mb.?";
         public string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Electronic Arts\\The Sims 4\\Mods\\";
         string dataPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Electronic Arts\\The Sims 4\\Mod_Manager\\" + "data.xml";
         string AllFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Electronic Arts\\The Sims 4\\Mod_Manager\\files\\";
@@ -26,7 +25,7 @@ namespace Sims_Mod_manager
         public static Category[] BaseCategories = new Category[] {
                         new Category("Build Mode"),
                         new Category("Buy Mode"),
-                        new Category("CAS(create a sim)"),
+                        new Category("CAS (create a sim)"),
                         new Category("Ect.") };
 
         public List<string> VisualCategories;
@@ -317,6 +316,10 @@ namespace Sims_Mod_manager
                 {
                     VisualCategories.Add(data.categories[i].name);
                 }
+                filterBox.Items.Clear();
+                filterBox.Items.Add(noCategory.name);
+                filterBox.Items.AddRange(VisualCategories.ToArray());
+                filterBox.SelectedIndex = 0;
                 GetModInfo();
             }
         }
