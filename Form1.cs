@@ -44,12 +44,22 @@ namespace Sims_Mod_manager
             VisualCategories = new List<string>();
 
             if (!Directory.Exists(AllFilesPath)) Directory.CreateDirectory(AllFilesPath);
-
-            string[] files = Directory.GetFiles(path, "*.package");
-            for (int i = 0; i < files.Length; i++)
-            {
-                Console.WriteLine(files[i]);
+            if(!Directory.Exists(AllFilesPath)){
+                string[] files = Directory.GetFiles(path, "*.package");
+                for (int i = 0; i < files.Length; i++)
+                {
+                    Console.WriteLine(files[i]);
+                }
             }
+            else
+            {
+                var errorForm = new errorForm();
+
+                errorForm.ShowDialog();
+                Console.WriteLine("Directory Not Found");
+
+            }
+
 
             if (File.Exists(dataPath))
             {

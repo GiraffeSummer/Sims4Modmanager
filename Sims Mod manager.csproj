@@ -59,6 +59,12 @@
     <Compile Include="EditCategories.Designer.cs">
       <DependentUpon>EditCategories.cs</DependentUpon>
     </Compile>
+    <Compile Include="errorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="errorForm.Designer.cs">
+      <DependentUpon>errorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +87,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EditCategories.resx">
       <DependentUpon>EditCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="errorForm.resx">
+      <DependentUpon>errorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
