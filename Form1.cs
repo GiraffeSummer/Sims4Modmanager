@@ -51,6 +51,7 @@ namespace Sims_Mod_manager
 
             if (!Directory.Exists(AllFilesPath)) Directory.CreateDirectory(AllFilesPath);
 
+            //Future plans: getting currently installed mods
             string[] files = Directory.GetFiles(path, "*.package");
             for (int i = 0; i < files.Length; i++)
             {

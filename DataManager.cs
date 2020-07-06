@@ -61,7 +61,7 @@ namespace Sims_Mod_manager
             return data;
         }
 
-        
+
     }
 
     [Serializable]
@@ -69,6 +69,7 @@ namespace Sims_Mod_manager
     {
         public string name;
         public Category() { name = ""; }
+        //public Category parent;
         public Category(string n)
         {
             name = n;

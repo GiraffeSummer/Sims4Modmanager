@@ -108,7 +108,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "EditCategories";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "EditCategories";
+            this.Text = "Edit Categories";
             this.ResumeLayout(false);
             this.PerformLayout();
 
