@@ -28,6 +28,7 @@ namespace Sims_Mod_manager
         {
             editMode = _editMode;
             InitializeComponent();
+            this.MaximizeBox = false;
             progressBar1.Visible = false;
             this.Text = "Select Mod";
             comboBox1.Items.AddRange(categories);
@@ -79,7 +80,7 @@ namespace Sims_Mod_manager
                 {
                     openFileDialog.Multiselect = true;
                     openFileDialog.InitialDirectory = Form1.data.openDirectory;
-                    openFileDialog.Filter = "Mod files (*.zip,*.package;*.t4script;)|*.zip;*.package|Whatever (testing) (*.*)|*.*";
+                    openFileDialog.Filter = "Mod files (*.zip,*.package;*.t4script;*.rar;)|*.zip;*.package;*.t4script;*.rar|Whatever (testing) (*.*)|*.*";
                     openFileDialog.FilterIndex = 1;
                     openFileDialog.RestoreDirectory = true;
 

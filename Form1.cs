@@ -43,6 +43,12 @@ namespace Sims_Mod_manager
 
             VisualCategories = new List<string>();
 
+            if (!Directory.Exists(path))
+            {
+                MessageBox.Show("The Sims 4 folder not found.\r\nIs Sims 4 installed?");
+                Environment.Exit(0);
+            }
+
             if (!Directory.Exists(AllFilesPath)) Directory.CreateDirectory(AllFilesPath);
 
             string[] files = Directory.GetFiles(path, "*.package");
