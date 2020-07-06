@@ -45,6 +45,9 @@
             this.modInfoBox = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.modEnabledFilter = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.modToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,7 +97,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(291, 59);
+            this.label2.Location = new System.Drawing.Point(337, 59);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 6;
@@ -114,7 +117,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(291, 188);
+            this.label1.Location = new System.Drawing.Point(337, 188);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 5;
@@ -122,24 +125,24 @@
             // 
             // searchBox
             // 
-            this.searchBox.Location = new System.Drawing.Point(3, 47);
+            this.searchBox.Location = new System.Drawing.Point(53, 46);
             this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(234, 20);
+            this.searchBox.Size = new System.Drawing.Size(258, 20);
             this.searchBox.TabIndex = 8;
             this.searchBox.TextChanged += new System.EventHandler(this.FilterChanged);
             // 
             // modFileBox
             // 
             this.modFileBox.FormattingEnabled = true;
-            this.modFileBox.Location = new System.Drawing.Point(294, 205);
+            this.modFileBox.Location = new System.Drawing.Point(340, 205);
             this.modFileBox.Name = "modFileBox";
-            this.modFileBox.Size = new System.Drawing.Size(259, 303);
+            this.modFileBox.Size = new System.Drawing.Size(302, 303);
             this.modFileBox.TabIndex = 4;
             // 
             // clearSearch
             // 
             this.clearSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearSearch.Location = new System.Drawing.Point(206, 72);
+            this.clearSearch.Location = new System.Drawing.Point(255, 70);
             this.clearSearch.Name = "clearSearch";
             this.clearSearch.Size = new System.Drawing.Size(56, 23);
             this.clearSearch.TabIndex = 9;
@@ -153,7 +156,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(12, 75);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(273, 433);
+            this.listBox1.Size = new System.Drawing.Size(319, 433);
             this.listBox1.TabIndex = 3;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
@@ -161,18 +164,18 @@
             // 
             this.filterBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filterBox.FormattingEnabled = true;
-            this.filterBox.Location = new System.Drawing.Point(3, 22);
+            this.filterBox.Location = new System.Drawing.Point(53, 22);
             this.filterBox.Name = "filterBox";
-            this.filterBox.Size = new System.Drawing.Size(234, 21);
+            this.filterBox.Size = new System.Drawing.Size(258, 21);
             this.filterBox.TabIndex = 10;
             this.filterBox.SelectedIndexChanged += new System.EventHandler(this.FilterChanged);
             // 
             // modInfoBox
             // 
-            this.modInfoBox.Location = new System.Drawing.Point(294, 75);
+            this.modInfoBox.Location = new System.Drawing.Point(340, 75);
             this.modInfoBox.Name = "modInfoBox";
             this.modInfoBox.ReadOnly = true;
-            this.modInfoBox.Size = new System.Drawing.Size(259, 107);
+            this.modInfoBox.Size = new System.Drawing.Size(302, 107);
             this.modInfoBox.TabIndex = 2;
             this.modInfoBox.Text = "";
             // 
@@ -188,6 +191,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.modEnabledFilter);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.searchBox);
@@ -195,14 +201,44 @@
             this.panel1.Controls.Add(this.filterBox);
             this.panel1.Location = new System.Drawing.Point(12, 514);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(273, 100);
+            this.panel1.Size = new System.Drawing.Size(319, 100);
             this.panel1.TabIndex = 11;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(3, 73);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(46, 13);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Enabled";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(3, 25);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(49, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Category";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(3, 49);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Search:";
             // 
             // modEnabledFilter
             // 
             this.modEnabledFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.modEnabledFilter.FormattingEnabled = true;
-            this.modEnabledFilter.Location = new System.Drawing.Point(3, 72);
+            this.modEnabledFilter.Location = new System.Drawing.Point(53, 70);
             this.modEnabledFilter.Name = "modEnabledFilter";
             this.modEnabledFilter.Size = new System.Drawing.Size(121, 21);
             this.modEnabledFilter.TabIndex = 13;
@@ -211,10 +247,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(3, 6);
+            this.label4.Location = new System.Drawing.Point(1, 1);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.Size = new System.Drawing.Size(43, 15);
             this.label4.TabIndex = 12;
             this.label4.Text = "Filters";
             // 
@@ -290,8 +327,10 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.modFileBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.modMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -326,6 +365,9 @@
         private System.Windows.Forms.ComboBox modEnabledFilter;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button CategoryBtn;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }
 

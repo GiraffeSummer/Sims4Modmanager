@@ -32,7 +32,7 @@ namespace Sims_Mod_manager
         public Form1()
         {
             InitializeComponent();
-
+            this.MaximizeBox = false;
             panel1.BorderStyle = BorderStyle.FixedSingle;
 
             modEnabledFilter.Items.AddRange(new string[] { "Ignore", "Enabled", "Disabled" });
@@ -281,6 +281,7 @@ namespace Sims_Mod_manager
         {
             filterBox.SelectedIndex = 0;
             searchBox.Text = "";
+            modEnabledFilter.SelectedIndex = 0;
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
@@ -309,7 +310,7 @@ namespace Sims_Mod_manager
             categories.dataPath = dataPath;
             categories.ShowDialog();
 
-            if (categories.DialogResult == DialogResult.OK)
+            if (categories.DialogResult == DialogResult.OK || categories.DialogResult == DialogResult.Cancel)
             {
                 VisualCategories.Clear();
                 for (int i = 0; i < data.categories.Count; i++)
@@ -323,5 +324,6 @@ namespace Sims_Mod_manager
                 GetModInfo();
             }
         }
+
     }
 }

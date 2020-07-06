@@ -9,16 +9,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Compression;
+using SharpCompress.Archives.Rar;
+using SharpCompress.Readers.Rar;
+using SharpCompress.Common;
+using SharpCompress.IO;
 
 namespace Sims_Mod_manager
 {
     public partial class NewMod : Form
     {
         public bool Busy = false;
-        string[] ForbinnenExtentions = new string[] { ".ico", ".exe", ".ini", ".txt", ".url" };
+        string[] ForbinnenExtentions = new string[] { ".ico", ".exe", ".ini", ".txt", ".url", ".jpg" };
         public Mod mod;
         public string extractPath = "";
         bool editMode;
+        Functions func = new Functions();
         public NewMod(string[] categories, bool _editMode = false, Mod _mod = null)
         {
             editMode = _editMode;
@@ -74,7 +79,7 @@ namespace Sims_Mod_manager
                 {
                     openFileDialog.Multiselect = true;
                     openFileDialog.InitialDirectory = Form1.data.openDirectory;
-                    openFileDialog.Filter = "Mod files (*.zip,*.package;*.t4script)|*.zip;*.package|Whatever (testing) (*.*)|*.*";
+                    openFileDialog.Filter = "Mod files (*.zip,*.package;*.t4script;)|*.zip;*.package|Whatever (testing) (*.*)|*.*";
                     openFileDialog.FilterIndex = 1;
                     openFileDialog.RestoreDirectory = true;
 
@@ -95,11 +100,10 @@ namespace Sims_Mod_manager
                             string extention = Path.GetExtension(filePath);
                             string folderpath = Path.GetDirectoryName(filePath);
                             Form1.data.openDirectory = folderpath;
-                            
-                            if (extention == ".zip" || extention == ".7z" || extention == ".rar")
+
+                            if (extention == ".zip" || extention == ".7z")
                             {
                                 progressBar1.Visible = true;
-
                                 //read files in zip an process them
                                 using (ZipArchive archive = ZipFile.Open(filePath, ZipArchiveMode.Read))
                                 {
@@ -113,16 +117,54 @@ namespace Sims_Mod_manager
 
                                             string ext = Path.GetExtension(itemName);
                                             if (ForbinnenExtentions.Contains(ext)) continue;
-                                            //Console.WriteLine(extractPath + itemName);
+
                                             item.ExtractToFile(extractPath + itemName, true);
                                             listBox1.Items.Add(item);
                                             mod.files.Add(extractPath + itemName);
                                             progressBar1.Value = archive.Entries.IndexOf(item);
                                         }
                                     }
-                                }                                
-                                
+                                }
+
                                 progressBar1.Visible = false;
+                            }
+                            else if (extention == ".rar")
+                            {
+                                int fileAmount = 0;
+                                // SharpCompress.Readers.Rar;
+                                using (RarReader reader = RarReader.Open(File.OpenRead(filePath)))
+                                {
+                                    while (reader.MoveToNextEntry())
+                                    { if (!reader.Entry.IsDirectory) fileAmount++; }
+                                }
+                                progressBar1.Maximum = fileAmount;
+                                using (RarReader reader = RarReader.Open(File.OpenRead(filePath)))
+                                {
+                                    while (reader.MoveToNextEntry())
+                                    {
+                                        if (!reader.Entry.IsDirectory)
+                                        {
+                                            using (EntryStream entryStream = reader.OpenEntryStream())
+                                            {
+                                                string file = Path.GetFileName(reader.Entry.Key);
+                                                if (null != file)
+                                                {
+                                                    string destinationFileName = extractPath + file;
+                                                    using (FileStream fs = File.OpenWrite(destinationFileName))
+                                                    {
+                                                        string ext = Path.GetExtension(file);
+                                                        if (ForbinnenExtentions.Contains(ext)) continue;
+                                                        func.TransferTo(reader, entryStream, fs);
+                                                        listBox1.Items.Add(file);
+                                                        mod.files.Add(extractPath + file);
+                                                        progressBar1.Value++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
                             }
                             else
                             {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SharpCompress.Readers.Rar;
 
 namespace Sims_Mod_manager
 {
@@ -59,6 +60,8 @@ namespace Sims_Mod_manager
             file.Close();
             return data;
         }
+
+        
     }
 
     [Serializable]
@@ -111,6 +114,25 @@ namespace Sims_Mod_manager
 
             //file is not locked
             return false;
+        }
+        public long TransferTo(RarReader reader, Stream source, Stream destination)
+        {
+            var array = new byte[81920];
+            long total = 0;
+            int count;
+            while ((count = source.Read(array, 0, array.Length)) != 0)
+            {
+                total += count;
+                destination.Write(array, 0, count);
+                if (total > 5000000)
+                {
+                    // Just as a test
+                    reader.Cancel();
+                    return -1;
+                }
+            }
+
+            return total;
         }
     }
 }
