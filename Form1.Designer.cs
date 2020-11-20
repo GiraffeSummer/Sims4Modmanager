@@ -57,6 +57,9 @@
             this.foldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.CategoryBtn = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.chromeLink = new System.Windows.Forms.LinkLabel();
+            this.ffLink = new System.Windows.Forms.LinkLabel();
             this.modMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -312,11 +315,45 @@
             this.CategoryBtn.UseVisualStyleBackColor = true;
             this.CategoryBtn.Click += new System.EventHandler(this.addCategoryBtn_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(705, 75);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(86, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Try the extention";
+            // 
+            // chromeLink
+            // 
+            this.chromeLink.AutoSize = true;
+            this.chromeLink.Location = new System.Drawing.Point(694, 99);
+            this.chromeLink.Name = "chromeLink";
+            this.chromeLink.Size = new System.Drawing.Size(43, 13);
+            this.chromeLink.TabIndex = 17;
+            this.chromeLink.TabStop = true;
+            this.chromeLink.Text = "Chrome";
+            this.chromeLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.chromeLink_LinkClicked);
+            // 
+            // ffLink
+            // 
+            this.ffLink.AutoSize = true;
+            this.ffLink.Location = new System.Drawing.Point(759, 99);
+            this.ffLink.Name = "ffLink";
+            this.ffLink.Size = new System.Drawing.Size(38, 13);
+            this.ffLink.TabIndex = 18;
+            this.ffLink.TabStop = true;
+            this.ffLink.Text = "Firefox";
+            this.ffLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ffLink_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 637);
+            this.Controls.Add(this.ffLink);
+            this.Controls.Add(this.chromeLink);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.CategoryBtn);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel1);
@@ -368,6 +405,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.LinkLabel chromeLink;
+        private System.Windows.Forms.LinkLabel ffLink;
     }
 }
 

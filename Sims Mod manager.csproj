@@ -53,6 +53,7 @@
   <PropertyGroup>
     <StartupObject>Sims_Mod_manager.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="SharpCompress, Version=0.25.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpCompress.0.25.1\lib\net46\SharpCompress.dll</HintPath>

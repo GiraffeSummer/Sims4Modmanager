@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Compression;
+using System.Net;
+using System.Net.Http;
 
 namespace Sims_Mod_manager
 {
@@ -31,8 +33,11 @@ namespace Sims_Mod_manager
         public List<string> VisualCategories;
         public Form1()
         {
+            string[] args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+
             InitializeComponent();
             this.MaximizeBox = false;
+
             panel1.BorderStyle = BorderStyle.FixedSingle;
 
             modEnabledFilter.Items.AddRange(new string[] { "Ignore", "Enabled", "Disabled" });
@@ -90,7 +95,52 @@ namespace Sims_Mod_manager
             filterBox.Items.AddRange(VisualCategories.ToArray());
 
             LoadMods();
+
+            if (false)
+            {
+                DialogResult dr = MessageBox.Show("Test deeplink?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (dr == DialogResult.Yes)
+                {
+                    DownloadMod(new string[] {
+                    "https://chii.modthesims.info/getfile.php?file=1966250",
+                    "test.rar" });
+                }
+            }
+
+            if (args.Length > 0)
+            {
+                DownloadMod(args[0].Substring("GS.GMM:".Length).Split(',')); ;
+            }
         }
+
+        void DownloadMod(string[] args)
+        {
+            string link = args[0];
+            string fileName = (args.Length > 1) ? args[1] : "Filename.zip";
+
+            WebClient client = new WebClient();
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            client.DownloadFile(link, Path.Combine(AllFilesPath, fileName));
+
+            NewMod m = new NewMod(AllFilesPath + fileName, VisualCategories.ToArray());
+            m.ShowDialog();
+
+            if (m.DialogResult == DialogResult.OK)
+            {
+                ProcessMod(m.mod);
+            }
+            /*
+            data.mods.Add(m.mod);
+            data.Save(dataPath);
+            listBox1.Items.Add(m.mod.name);*/
+
+            //MessageBox.Show(Application.StartupPath);
+            //MessageBox.Show(String.Join("-", args));
+        }
+
+
+
 
         void LoadMods()
         {
@@ -112,62 +162,75 @@ namespace Sims_Mod_manager
             for (int i = 0; i < filteredMods.Count; i++)
             {
                 string name = filteredMods[i].name;
-                listBox1.Items.Add(name);
+                int index = listBox1.Items.Add(name);
+                if (filteredMods[i].enabled)
+                {
+                    //  Control c = (Control)listBox1.Items[index];
+                    //  c.BackColor = Color.Red;
+                }
 
                 // if (data.mods[i].enabled) checkedListBox1.SetItemChecked(i, true);
             }
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void ProcessMod(Mod mod)
         {
             Timer timer = new Timer();
+            Functions f = new Functions();
+
+            progressBar1.Visible = true;
+            progressBar1.Value = 0;
+            progressBar1.Maximum = mod.files.Count;
+            Console.WriteLine("FORM: " + mod.files.Count);
+            for (int i = 0; i < mod.files.Count; i++)
+            {
+                string fileName = Path.GetFileName(mod.files[i]);
+
+                string packPath = mod.files[i];
+                Console.WriteLine("Pack: " + packPath);
+                Console.WriteLine(AllFilesPath + fileName);
+                Console.WriteLine(f.IsFileLocked(new FileInfo(packPath)));
+                do
+                {
+                    try
+                    {
+                        File.Copy(packPath, AllFilesPath + fileName, true);
+                        //File.Copy(packPath, path + fileName, true);
+                    }
+                    catch (Exception er) { }
+                } while (f.IsFileLocked(new FileInfo(packPath)));
+
+                mod.files[i] = AllFilesPath + fileName;
+                progressBar1.Value = i;
+            }
+            data.mods.Add(mod);
+            data.Save(dataPath);
+            listBox1.Items.Add(mod.name);
+
+            timer.Interval = 500;
+            timer.Start();
+
+            timer.Tick += delegate (object se, EventArgs ea)
+            {
+                progressBar1.Visible = false;
+                timer.Enabled = false;
+                timer.Dispose();
+                ToggleInstallMod(mod, true);
+            };
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
             NewMod m = new NewMod(VisualCategories.ToArray());
             m.extractPath = AllFilesPath;
             m.ShowDialog();
-            Functions f = new Functions();
+           
 
             if (m.DialogResult == DialogResult.OK)
             {
-                progressBar1.Visible = true;
-                progressBar1.Value = 0;
-                progressBar1.Maximum = m.mod.files.Count;
-                Console.WriteLine("FORM: " + m.mod.files.Count);
-                for (int i = 0; i < m.mod.files.Count; i++)
-                {
-                    string fileName = Path.GetFileName(m.mod.files[i]);
-
-                    string packPath = m.mod.files[i];
-                    Console.WriteLine("Pack: " + packPath);
-                    Console.WriteLine(AllFilesPath + fileName);
-                    Console.WriteLine(f.IsFileLocked(new FileInfo(packPath)));
-                    do
-                    {
-                        try
-                        {
-                            File.Copy(packPath, AllFilesPath + fileName, true);
-                            //File.Copy(packPath, path + fileName, true);
-                        }
-                        catch (Exception er) { }
-                    } while (f.IsFileLocked(new FileInfo(packPath)));
-
-                    m.mod.files[i] = AllFilesPath + fileName;
-                    progressBar1.Value = i;
-                }
-                data.mods.Add(m.mod);
-                data.Save(dataPath);
-                listBox1.Items.Add(m.mod.name);
-
-                timer.Interval = 500;
-                timer.Start();
-
-                timer.Tick += delegate (object se, EventArgs ea)
-                {
-                    progressBar1.Visible = false;
-                    timer.Enabled = false;
-                    timer.Dispose();
-                    ToggleInstallMod(m.mod, true);
-                };
+                ProcessMod(m.mod);
 
                 //checkedListBox1.SetItemChecked(indexMax, true);
             }
@@ -332,5 +395,16 @@ namespace Sims_Mod_manager
             }
         }
 
+        private void ffLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ffLink.LinkVisited = true;
+            System.Diagnostics.Process.Start("https://addons.mozilla.org/en-GB/firefox/addon/sims-4-mod-manager-addon/");
+        }
+
+        private void chromeLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            chromeLink.LinkVisited = true;
+            System.Diagnostics.Process.Start("https://chrome.google.com/webstore/detail/mmfllkanpneonkgdnpbgeojbolpjchjb");
+        }
     }
 }

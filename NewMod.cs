@@ -51,6 +51,22 @@ namespace Sims_Mod_manager
             }
         }
 
+        public NewMod(string path, string[] categories)
+        {
+            //from url
+            InitializeComponent();
+            this.MaximizeBox = false;
+            progressBar1.Visible = false;
+            this.Text = "Select Mod";
+            extractPath = Path.GetDirectoryName(path);
+            comboBox1.Items.AddRange(categories);
+
+            button3.Visible = false;
+            button3.Enabled = false;
+
+            AddMod(path);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
@@ -69,6 +85,107 @@ namespace Sims_Mod_manager
             Console.WriteLine("MOd ADDER:" + mod.files.Count);
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        public void AddMod(string path)
+        {
+            mod = HandleModFiles(path);
+            string fileName = Path.GetFileName(path);
+            this.Text = fileName;
+            textBox1.Text = fileName;
+            comboBox1.SelectedIndex = comboBox1.Items.IndexOf(mod.category.name);
+        }
+
+        public Mod HandleModFiles(string modpath)
+        {
+            comboBox1.SelectedIndex = comboBox1.Items.Count - 1;
+            mod = new Mod(Path.GetFileName(modpath));
+            mod.category = new Category(comboBox1.Items[comboBox1.SelectedIndex].ToString());
+            this.textBox1.Text = Path.GetFileName(modpath).Replace(Path.GetExtension(modpath), "");
+            this.Text = Path.GetFileName(modpath) + " (" + Path.GetExtension(modpath) + ")";
+            Busy = true;
+            button2.Enabled = false;
+
+            // string filePath = openFileDialog.FileName;
+            string fileName = Path.GetFileName(modpath);
+            string extention = Path.GetExtension(modpath);
+            string folderpath = Path.GetDirectoryName(modpath);
+            Form1.data.openDirectory = folderpath;
+
+            if (extention == ".zip" || extention == ".7z")
+            {
+                progressBar1.Visible = true;
+                //read files in zip an process them
+                using (ZipArchive archive = ZipFile.Open(modpath, ZipArchiveMode.Read))
+                {
+                    progressBar1.Maximum = archive.Entries.Count;
+                    foreach (ZipArchiveEntry item in archive.Entries)
+                    {
+                        if (!String.IsNullOrEmpty(item.Name))//check if not folder
+                        {
+                            string itemName = item.FullName;
+                            if (itemName.Contains('/')) itemName = itemName.Split('/')[1];
+
+                            string ext = Path.GetExtension(itemName);
+                            if (ForbinnenExtentions.Contains(ext)) continue;
+
+                            item.ExtractToFile(extractPath + "\\" + itemName, true);
+                            listBox1.Items.Add(item);
+                            mod.files.Add(extractPath + "\\" + itemName);
+                            progressBar1.Value = archive.Entries.IndexOf(item);
+                        }
+                    }
+                }
+
+                progressBar1.Visible = false;
+            }
+            else if (extention == ".rar")
+            {
+                int fileAmount = 0;
+                // SharpCompress.Readers.Rar;
+                using (RarReader reader = RarReader.Open(File.OpenRead(modpath)))
+                {
+                    while (reader.MoveToNextEntry())
+                    { if (!reader.Entry.IsDirectory) fileAmount++; }
+                }
+                progressBar1.Maximum = fileAmount;
+                using (RarReader reader = RarReader.Open(File.OpenRead(modpath)))
+                {
+                    while (reader.MoveToNextEntry())
+                    {
+                        if (!reader.Entry.IsDirectory)
+                        {
+                            using (EntryStream entryStream = reader.OpenEntryStream())
+                            {
+                                string file = Path.GetFileName(reader.Entry.Key);
+                                if (null != file)
+                                {
+                                    string destinationFileName = Path.Combine(extractPath + "\\", file);
+                                    using (FileStream fs = File.OpenWrite(destinationFileName))
+                                    {
+                                        string ext = Path.GetExtension(file);
+                                        if (ForbinnenExtentions.Contains(ext)) continue;
+                                        func.TransferTo(reader, entryStream, fs);
+                                        listBox1.Items.Add(file);
+                                        mod.files.Add(extractPath + "\\" + file);
+                                        //  progressBar1.Value++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                mod.files.Add(modpath);
+                listBox1.Items.Add(Path.GetFileName(modpath));
+            }
+
+            button2.Enabled = true;
+            Busy = false;
+            return mod;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -158,7 +275,7 @@ namespace Sims_Mod_manager
                                                         func.TransferTo(reader, entryStream, fs);
                                                         listBox1.Items.Add(file);
                                                         mod.files.Add(extractPath + file);
-                                                        progressBar1.Value++;
+                                                        //  progressBar1.Value++;
                                                     }
                                                 }
                                             }

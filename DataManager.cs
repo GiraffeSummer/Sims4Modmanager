@@ -79,14 +79,16 @@ namespace Sims_Mod_manager
     [Serializable]
     public class Mod
     {
+        public string uid;
         public string name;
         public Category category;
         public bool enabled;
         public List<string> files;
 
-        public Mod() { name = ""; enabled = true; }
+        public Mod() { name = ""; enabled = true; uid = Guid.NewGuid().ToString(); }
         public Mod(string n)
         {
+            uid = Guid.NewGuid().ToString();
             name = n;
             files = new List<string>();
             enabled = true;
